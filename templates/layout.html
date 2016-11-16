@@ -1,0 +1,15 @@
+<!doctype html>
+<title>Flaskr</title>
+<head>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.css" type="text/css" />
+<script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='jquery.js') }}">
+</script>
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='jquery.dataTables.min.js') }}">
+</script>
+</head>
+<div class=page>
+  <h1>テストページ</h1>
+  {% block body %}{% endblock %}
+</div>

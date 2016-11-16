@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<nav>
+<h2>メニュー</h2>
+<ul>
+<li><a href = "{{ url_for('show_tables') }}">HOME</a></li>
+</nav>
+
+<h1>クエリ</h1>
+
+
+  <form action="{{ url_for('multi_query') }}"  method="post">
+<p>クエリ選択<br>
+<input type="radio" name="q1" value="drug1"> 処方チェック１
+<input type="radio" name="q1" value="drug2"> 処方チェック2
+<input type="radio" name="q1" value="drug3"> 処方チェック３
+<input type="radio" name="q1" value="taihi"> 出来高対比
+</p>
+ <button type="submit" name='trigger' value="on">クエリ実行</button>
+ </form>
+ 
+<div class="tablecontainer">
+
+<h2>{{ query_name|safe }}</h2>
+</div>
+
+ 
+<h1>クエリデータ</h1>
+<div class="tablecontainer">
+{{ query_data|safe }}
+</div>
+
+<script>
+$(document).ready(function(){
+$('.dataframe').dataTable(
+{
+iDisplayLength : -1
+}
+);
+});
+ </script>
+
+
+{% endblock %}
+<!--
+ <form action="{{ url_for('stack_tables') }}"  method="post">
+ アクション：
+<input type="radio" name="stack" value="on" /> on　
+ <input type="submit" value="実行ボタン">
+ </form>
+ -->

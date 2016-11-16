@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+
+<div class="page1">
+  <h1>現在のデータ（先頭１０件）</h1>
+    {{ dtable|safe }}
+    </br>
+    {{ etable|safe }}
+</div>
+
+
+
+<h1>データの登録</h1>
+    <form action="{{ url_for('read_pandas') }}" method="post" enctype="multipart/form-data">
+      <p><input type="file" name="dfile">
+         <input type="submit" value="Dファイル登録">
+      <p><input type="file" name="efile">
+         <input type="submit" value="EFファイル登録">
+    </form>
+
+</br>
+
+<h1>データの削除</h1>
+  <form action="{{ url_for('delete_data') }}"  method="post">
+<p>クエリ選択<br>
+<input type="radio" name="t1" value="dtable"> Dファイル削除
+<input type="radio" name="t1" value="etable"> EFファイル削除
+</p>
+ <button type="submit" name='d_trigger' value="on">削除実行</button>
+ </form>
+
+
+
+
+<div class="tablecontainer">
+    {{ filedata|safe }}
+</div>
+
+
+
+<script>
+$(document).ready(function(){
+$('.dataframe').dataTable(
+{
+iDisplayLength : -1
+}
+);
+});
+ </script>
+
+{% endblock %}
+
+
+
+<!--
+ <form action="{{ url_for('stack_tables') }}"  method="post">
+ アクション：
+<input type="checkbox" name="stack" value="on" /> on　
+ <input type="submit" value="実行ボタン">
+ </form>
+  -->

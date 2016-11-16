@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<nav>
+<h2>メニュー</h2>
+<ul>
+<li><a href = "{{ url_for('show_tables') }}">HOME</a></li>
+</nav>
+
+<h1>データを削除しました！</h1>
+
+
+<script>
+$(document).ready(function(){
+$('.dataframe').dataTable(
+{
+iDisplayLength : -1
+}
+);
+});
+ </script>
+
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<nav>
+<h2>メニュー</h2>
+<ul>
+<li><a href = "#">HOME</a></li>
+<li><a href = "{{ url_for('reha_top') }}">リハビリ</a></li>
+<li><a href = "{{ url_for('op_top') }}">手術</a></li>
+<li><a href = "{{ url_for('op_nonweektop') }}">手術（曜日なし）</a></li>
+<li><a href = "{{ url_for('datas') }}">データ検索</a></li>
+</nav>
+
+<div class="page1">
+  <h1>平成２８年度データ</h1>
+    {{ writedata|safe }}
+</div>
+
+<script>
+$(document).ready(function(){
+$('.dataframe').dataTable(
+{
+iDisplayLength : -1
+}
+);
+});
+ </script>
+
+{% endblock %}
+
+
+
+<!--
+ <form action="{{ url_for('stack_tables') }}"  method="post">
+ アクション：
+<input type="checkbox" name="stack" value="on" /> on　
+ <input type="submit" value="実行ボタン">
+ </form>
+  -->
