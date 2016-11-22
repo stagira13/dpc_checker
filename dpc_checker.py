@@ -52,7 +52,7 @@ AND 明細点数・金額 > 0;'''
 
 
 query = {'taihi':q_taihi,'drug1':q_entdrug1,'drug2':q_entdrug2,'drug3':q_entdrug3}
-query_name = {'taihi':'DPC出来高対比','drug1':'退院日に出来高になってないもの（２７９になってないぞ）',
+query_name = {'taihi':'DPC出来高対比','drug1':'退院日に出来高になってないもの',
 				'drug2':'退院日前日の退院処方探し（おそらく退院処方）',
 				'drug3':'退院日以前の退院処方'}
 
@@ -126,9 +126,27 @@ def multi_query():
 		req_query = request.form['q1']
 		query_data = pd.read_sql(query[req_query],conn)
 		conn.close()
+		session['temp_csv'] = query_data.to_csv()
 		return render_template('query.html',query_name = query_name[req_query],query_data = query_data.to_html(classes='query_data'))
 	else:
 		return render_template('query.html')
+
+
+
+
+@app.route("/csv",methods = ['GET'])
+def download_csv():
+	csvdata = session.get('temp_csv')
+	response = make_response(csvdata)
+	cd = 'attachment; filename = output.csv'
+	response.headers['Content-Disposition'] = cd
+	response.mimetype = 'text/csv'
+
+	return response
+
+#別にユーザーログイン管理などをしないアプリケーションなので、secret keyはお飾りです。
+#これが設定されていないとsessionを使ってdef間にデータを渡すことが出来ません(globalを使う手もありますが)
+app.secret_key = 'ddd873jf'
 
 
 
