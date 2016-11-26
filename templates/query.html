@@ -7,23 +7,24 @@
 <li><a href = "{{ url_for('show_tables') }}">HOME</a></li>
 </nav>
 
-<h1>クエリ</h1>
+<h1>クエリ発行ページ</h1>
 
 <li><a href = "{{ url_for('download_csv') }}">CSVダウンロード</a></li>
 
-  <form action="{{ url_for('multi_query') }}"  method="post">
+
+<form action="{{ url_for('multi_query') }}"  method="post">
 <p>クエリ選択<br>
-<input type="radio" name="q1" value="drug1"> 処方チェック１
-<input type="radio" name="q1" value="drug2"> 処方チェック2
-<input type="radio" name="q1" value="drug3"> 処方チェック３
-<input type="radio" name="q1" value="taihi"> 出来高対比
+{% for query_name in query_keys %}
+   <input type="radio" name="q1" value= {{ query_name }}> {{ query_name }}<br>
+{% endfor %}
 </p>
  <button type="submit" name='trigger' value="on">クエリ実行</button>
  </form>
+
  
 <div class="tablecontainer">
 
-<h2>{{ query_name|safe }}</h2>
+<h2>{{ select_query_name|safe }}</h2>
 </div>
 
  

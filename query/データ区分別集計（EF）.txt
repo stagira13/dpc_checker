@@ -1,0 +1,7 @@
+--データ区分別集計（Dファイル）
+select データ区分,sum(行為点数*行為回数) AS 出来高点数
+from etable
+WHERE データ区分 <> 92
+AND データ区分 <> 97
+group by データ区分
+order by データ区分;

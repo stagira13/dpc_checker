@@ -3,58 +3,19 @@ import pandas as pd
 import numpy as np
 import datetime
 import sqlite3
-
+import glob
+import os
 app = Flask(__name__)
 
 #複数行の文字列は'''で囲む
 
-q_taihi = '''WITH dsum AS ( select データ識別番号,入院年月日,sum(行為点数*行為回数) AS DPC総点数 \
-from dtable \
-where データ区分 <> 97 \
-group by データ識別番号,入院年月日), \
-efsum AS( \
-SELECT データ識別番号,入院年月日,SUM(出来高実績点数*行為回数) AS 出来高総点数 \
-FROM etable \
-WHERE データ区分 <> 92 \
-AND データ区分 <> 97 \
-AND 行為明細区分情報 LIKE '__0_________' \
-group by データ識別番号,入院年月日) \
-select distinct d.データ識別番号-10 AS 患者ID,d.入院年月日, \
-d.DPC総点数,e.出来高総点数,d.DPC総点数-e.出来高総点数 AS 点数差異 \
-from dsum AS d \
-INNER JOIN efsum AS e \
-USING(データ識別番号,入院年月日)'''
+query_list = glob.glob('query/*.txt')
 
-q_entdrug1 = '''select データ識別番号-10 AS ID,診療明細名称,使用量,明細点数・金額,行為回数,実施年月日,病棟コード \
-from etable \
-Where 実施年月日 = 退院年月日 \
-AND 行為明細区分情報 LIKE '0_0_________' \
-AND データ区分 BETWEEN 21 AND 23 \
-AND 明細点数・金額 > 0 \
-AND 行為回数 > 1;'''
-
-
-q_entdrug2 = '''select データ識別番号-10 AS ID,診療明細名称,使用量,明細点数・金額,行為回数,実施年月日,病棟コード \
-from etable \
-Where CAST(退院年月日 AS INTEGER) - CAST(実施年月日 AS INTEGER)  = 1 \
-AND 行為明細区分情報 LIKE '0_0_________' \
-AND データ区分 BETWEEN 21 AND 22 \
-AND 明細点数・金額 > 0 \
-AND 行為回数 > 1 \
-AND 退院年月日 <> '0';'''
-
-q_entdrug3 = '''select データ識別番号-10 AS ID,診療明細名称,使用量,明細点数・金額,行為回数,実施年月日,病棟コード \
-from etable \
-Where 実施年月日 <> 退院年月日 \
-AND 行為明細区分情報 LIKE '1_0_________' \
-AND データ区分 BETWEEN 21 AND 23 \
-AND 明細点数・金額 > 0;'''
-
-
-query = {'taihi':q_taihi,'drug1':q_entdrug1,'drug2':q_entdrug2,'drug3':q_entdrug3}
-query_name = {'taihi':'DPC出来高対比','drug1':'退院日に出来高になってないもの',
-				'drug2':'退院日前日の退院処方探し（おそらく退院処方）',
-				'drug3':'退院日以前の退院処方'}
+querys = {}
+for i in query_list:
+    name,txt = os.path.splitext(os.path.basename(i))
+    with open(i, "r+",encoding='utf-8') as file:
+        querys[name] = file.read()
 
 conn = sqlite3.connect('dpc.db')
 c = conn.cursor()
@@ -124,12 +85,14 @@ def multi_query():
 	if request.method == 'POST' and request.form['trigger'] == 'on':
 		conn = sqlite3.connect('dpc.db')
 		req_query = request.form['q1']
-		query_data = pd.read_sql(query[req_query],conn)
+		query_data = pd.read_sql(querys[req_query],conn)
 		conn.close()
 		session['temp_csv'] = query_data.to_csv()
-		return render_template('query.html',query_name = query_name[req_query],query_data = query_data.to_html(classes='query_data'))
+		return render_template('query.html',select_query_name = req_query,
+			query_data = query_data.to_html(classes='query_data'),
+			query_keys = sorted(querys.keys()))
 	else:
-		return render_template('query.html')
+		return render_template('query.html',query_keys = sorted(querys.keys()))
 
 
 

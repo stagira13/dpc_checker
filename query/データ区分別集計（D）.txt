@@ -1,0 +1,6 @@
+--データ区分別集計（Dファイル）
+select データ区分,round(sum(行為点数*行為回数)) AS DPC点数
+from dtable
+WHERE データ区分 <> 97
+group by データ区分
+order by データ区分;

@@ -12,10 +12,16 @@
 
 
 <h1>クエリ発行</h1>
-<li><a href = "{{ url_for('multi_query') }}">HOME</a></li>
-</br>
+ <h2>
+ <a href = "{{ url_for('multi_query') }}" > クエリ発行ページへ移動する</a>
+ </h2>
+<p> 各種のSQLクエリを発行してデータチェックを行います。
+</br>結果はcsvでダウンロードすることも可能です。
 
 <h1>データの登録</h1>
+<p> 下記ボタンよりEFファイル/Dファイルの登録を行います。
+</br>
+
     <form action="{{ url_for('read_pandas') }}" method="post" enctype="multipart/form-data">
       <p><input type="file" name="dfile">
          <input type="submit" value="Dファイル登録">
@@ -26,6 +32,8 @@
 </br>
 
 <h1>データの削除</h1>
+<p> 下記ボタンよりEFファイル/Dファイルの削除を行います。
+</br>
   <form action="{{ url_for('delete_data') }}"  method="post">
 <p>クエリ選択<br>
 <input type="radio" name="t1" value="dtable"> Dファイル削除

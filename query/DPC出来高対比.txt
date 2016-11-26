@@ -1,0 +1,17 @@
+--DPC出来高対比
+WITH dsum AS ( select データ識別番号,入院年月日,sum(行為点数*行為回数) AS DPC総点数
+from dtable
+where データ区分 <> 97 
+group by データ識別番号,入院年月日), 
+efsum AS(
+SELECT データ識別番号,入院年月日,SUM(出来高実績点数*行為回数) AS 出来高総点数
+FROM etable 
+WHERE データ区分 <> 92 
+AND データ区分 <> 97 
+AND 行為明細区分情報 LIKE '__0_________' 
+group by データ識別番号,入院年月日) 
+select distinct d.データ識別番号-10 AS 患者ID,d.入院年月日, 
+d.DPC総点数,e.出来高総点数,d.DPC総点数-e.出来高総点数 AS 点数差異 
+from dsum AS d 
+INNER JOIN efsum AS e 
+USING(データ識別番号,入院年月日);

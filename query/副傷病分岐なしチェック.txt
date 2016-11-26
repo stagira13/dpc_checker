@@ -1,0 +1,5 @@
+--副傷病分岐なしDPCチェック
+select distinct 病棟コード,データ識別番号,診療行為名称,分類番号
+from dtable
+Where 分類番号 LIKE '____________0_'
+AND データ区分 = 93;
