@@ -1,0 +1,12 @@
+﻿--DPC期間中の注射探し
+WITH d93 AS (select データ識別番号,実施年月日 from dtable Where データ区分 = 93),
+e30 AS (select データ識別番号,実施年月日,診療明細名称,SUM(明細点数・金額*行為回数)  AS 出来高金額
+from etable
+Where データ区分 BETWEEN 30 AND 33
+AND 解釈番号 NOT LIKE '%G00%'
+group by データ識別番号,実施年月日,診療明細名称
+HAVING SUM(明細点数・金額*行為回数) > 0)
+select d93.データ識別番号,d93.実施年月日,e30.診療明細名称,e30.出来高金額
+from d93
+INNER JOIN e30
+USING(データ識別番号,実施年月日)
