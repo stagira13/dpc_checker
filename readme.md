@@ -1,11 +1,16 @@
-# DPCƒ`ƒFƒbƒJ[ ver 0.07
+# DPCƒ`ƒFƒbƒJ[ ver 0.08
 
 Dƒtƒ@ƒCƒ‹EEFƒtƒ@ƒCƒ‹‚ðƒ[ƒh‚µASQLiteƒf[ƒ^ƒx[ƒX‚É“o˜^‚µ‚Ä
 ƒNƒGƒŠ‚ð”­s‚·‚éƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚·B
 Œ»Ý‚Íƒf[ƒ^Ž¯•Ê”Ô†^“ü‰@”NŒŽ“ú•Ê‚Ìo—ˆ‚‘Î”äA‘Þ‰@ˆ•û‚Ì“ü—Íƒ~ƒXƒ`ƒFƒbƒN‚È‚Ç‚Ì
 ‹@”\‚ðŽÀ‘•‚µ‚Ä‚¢‚Ü‚·B
 
-‘S‚­‚Ì–¢Š®¬‚È‚Ì‚ÅAƒo[ƒWƒ‡ƒ“‚Í0.07‚Æ‚µ‚Ä‚ ‚è‚Ü‚·B
+‘S‚­‚Ì–¢Š®¬‚È‚Ì‚ÅAƒo[ƒWƒ‡ƒ“‚Í0.08‚Æ‚µ‚Ä‚ ‚è‚Ü‚·B
+
+## ver 0.08 ƒfƒUƒCƒ“C³^‹““®C³
+Google‚ÌMaterial Design Lite‚ÌTemplate‚ð—¬—p‚µ‚ÄA‚Ù‚ñ‚Ì­‚µ‚¾‚¯ƒfƒUƒCƒ“‚ªƒ}ƒV‚É‚È‚è‚Ü‚µ‚½B‚Ü‚¾FXHŽ–’†‚Å‚·B    
+‚»‚ê‚Æ‚Í•Ê‚ÉA“o˜^Eíœ‚ðs‚¤“xA•Êƒy[ƒW‚É‘JˆÚ‚·‚é•Ï‚È‹““®‚ªC³‚³‚ê‚Ü‚µ‚½B
+
 
 ## ver 0.07‚ÌV‹@”\ ŠO•”ƒNƒGƒŠ“Ç‚Ýž‚Ý
 
@@ -22,7 +27,7 @@ DPCƒ`ƒFƒbƒJ[‹N“®Žž‚ÉŽ©“®“I‚É“Ç‚Ýž‚Ü‚êA`ƒNƒGƒŠ”­sƒy[ƒW`‚ÌƒNƒGƒŠƒŠƒXƒg‚É’Ç‰Á‚
 - “Á’è‚Ì•a“‚ðœŠO‚·‚é‹@”\@–¢ŽÀ‘•i—\’è‚ ‚èj
 - ƒOƒ‰ƒt‚É‚æ‚éƒf[ƒ^‚Ì‰ÂŽ‹‰»@–¢ŽÀ‘•iBokeh‚ðŽg—p‚·‚é—\’èj
 - •¡”ŒŽ‚É‚Ü‚½‚ª‚éƒf[ƒ^‚Ì“o˜^@–¢ŽÀ‘•i•ûj–¢Œˆ’èj
-- Œ©‚½–Ú‚ðƒ}ƒgƒ‚‚É‚·‚éBbootstrap‚Ì•×‹­‚©¥¥¥
+- Œ©‚½–Ú‚ðƒ}ƒgƒ‚‚É‚·‚éBMaterial Design Lite‚Éæ‚Á‚©‚éB
 
 ## Žg—pƒ‰ƒCƒuƒ‰ƒŠ
 
@@ -30,6 +35,7 @@ DPCƒ`ƒFƒbƒJ[‹N“®Žž‚ÉŽ©“®“I‚É“Ç‚Ýž‚Ü‚êA`ƒNƒGƒŠ”­sƒy[ƒW`‚ÌƒNƒGƒŠƒŠƒXƒg‚É’Ç‰Á‚
 - Flask
 - DataTables
 - jquery
+- Material Design Lite
 
 ## “®ìðŒ
 

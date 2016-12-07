@@ -2,52 +2,86 @@
 {% block body %}
 
 
-
 <div class="page1">
-  <h1>現在のデータ（先頭１０件）</h1>
+  <h1 class="mdl-typography--display-2">現在のデータ（先頭１０件）</h1>
     {{ dtable|safe }}
     </br>
     {{ etable|safe }}
 </div>
 
 
-<h1>クエリ発行</h1>
- <h2>
+<div class="mdl-grid">
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--8-col">
+
+<h1 class="mdl-typography--display-2">クエリ発行</h1>
+ <h2 class="mdl-typography--display-1">
  <a href = "{{ url_for('multi_query') }}" > クエリ発行ページへ移動する</a>
  </h2>
-<p> 各種のSQLクエリを発行してデータチェックを行います。
-</br>結果はcsvでダウンロードすることも可能です。
+<p> 各種のSQLクエリを発行してデータチェックを行います。</p>
+<p> 結果はcsvでダウンロードすることも可能です。 </p>
+<br>
+</div>
+</div>
 
-<h1>データの登録</h1>
-<p> 下記ボタンよりEFファイル/Dファイルの登録を行います。
-</br>
+<div class="mdl-grid">
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--8-col">
+<h1 class="mdl-typography--display-2">データの登録</h1>
+<p class="mdl-typography--headline"> 下記ボタンよりEFファイル/Dファイルの登録を行います。</p>
+<br>
 
     <form action="{{ url_for('read_pandas') }}" method="post" enctype="multipart/form-data">
       <p><input type="file" name="dfile">
-         <input type="submit" value="Dファイル登録">
+         <input type="submit" value="Dファイル登録"></p>
       <p><input type="file" name="efile">
-         <input type="submit" value="EFファイル登録">
+         <input type="submit" value="EFファイル登録"></p>
     </form>
 
-</br>
+<br>
+ {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
+</div>
+</div>
 
-<h1>データの削除</h1>
-<p> 下記ボタンよりEFファイル/Dファイルの削除を行います。
+
+<div class="mdl-grid">
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--8-col">
+
+<h1 class="mdl-typography--display-2">データの削除</h1>
+<p class="mdl-typography--headline"> 下記ボタンよりEFファイル/Dファイルの削除を行います。</p>
 </br>
   <form action="{{ url_for('delete_data') }}"  method="post">
-<p>クエリ選択<br>
-<input type="radio" name="t1" value="dtable"> Dファイル削除
-<input type="radio" name="t1" value="etable"> EFファイル削除
-</p>
- <button type="submit" name='d_trigger' value="on">削除実行</button>
+<p class="mdl-typography--title">クエリ選択</p>
+<br>
+<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+<input type="radio" name="t1" id="option-1" class="mdl-radio__button" value="dtable">  <span class="mdl-radio__label">Dファイル削除</span>
+</label>
+<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+<input type="radio" name="t1" id="option-2" class="mdl-radio__button" value="etable"> <span class="mdl-radio__label">EFファイル削除</span>
+</label>
+    
+ <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit" name='d_trigger' value="on">削除実行</button>
  </form>
 
+ {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
 
-
-
-<div class="tablecontainer">
-    {{ filedata|safe }}
 </div>
+</div>
+
 
 
 
@@ -60,6 +94,7 @@ iDisplayLength : -1
 );
 });
  </script>
+
 
 {% endblock %}
 

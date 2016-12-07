@@ -1,15 +1,36 @@
 <!doctype html>
 <title>DPCチェッカー</title>
 <head>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.css" type="text/css" />
-<script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.0.min.js"></script>
 <script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='jquery.js') }}">
 </script>
 <script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='jquery.dataTables.min.js') }}">
 </script>
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='d3.min.js') }}">
+</script>
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='c3.min.js') }}">
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='c3.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- 上記２つは消してもよい。Robotoフォントはほぼ未使用。iconsは使用していない 将来使用するならダウンロードして個別に使うべき-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='material.deep_purple-pink.min.css') }}">
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='material.min.js') }}"></script>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 </head>
-<div class=page>
-  <h1>DPCチェッカー</h1>
+      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h1 class="mdl-typography--display-3">DPCチェッカー</h1>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+          <a href="{{ url_for('show_tables') }}" class="mdl-layout__tab is-active">HOME</a>
+          <a href="{{ url_for('multi_query') }}" class="mdl-layout__tab">Query</a>
+        </div>
+      </header>
+
+
   {% block body %}{% endblock %}
-</div>

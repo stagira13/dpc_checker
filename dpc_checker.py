@@ -44,8 +44,8 @@ def show_tables():
 	etable = pd.read_sql('select * from etable limit 10',conn)
 	dtable = pd.read_sql('select * from dtable limit 10',conn)
 	conn.close()
-	return render_template('view.html',etable=etable.to_html(classes='etable'),
-		dtable = dtable.to_html(classes='dtable'))
+	return render_template('view.html',etable=etable.to_html(classes="mdl-data-table mdl-js-data-table"),
+		dtable = dtable.to_html(classes="mdl-data-table mdl-js-data-table"))
 
 
 @app.route("/pandas",methods=['GET','POST'])
@@ -64,8 +64,9 @@ def read_pandas():
 		df1.to_sql('dtable',conn,if_exists='append',index = False) 
 		c.execute('''UPDATE dtable SET 行為点数 = 行為点数 * 医療機関係数 Where データ区分 = 93''')
 		conn.commit()
-		filedata = pd.read_sql('select * from dtable limit 20',conn)
 		conn.close()
+		flash('Dファイルデータを登録しました')
+		return redirect(url_for('show_tables'))
 	elif request.method == 'POST' and request.files['efile']:
 		data = request.files['efile']
 		df2 = pd.read_csv(data,encoding = 'shift_jisx0213',delimiter = '\t',
@@ -73,9 +74,10 @@ def read_pandas():
 		conn = sqlite3.connect('dpc.db')
 		df2.to_sql('etable',conn,if_exists='append',index = False) 
 		# ↑Replaceはやめよう
-		filedata = pd.read_sql('select * from etable limit 20',conn)
 		conn.close()
-	return render_template('view.html',filedata = filedata.to_html(classes='filedata'))
+		flash('Dファイルデータを登録しました')
+		return redirect(url_for('show_tables'))
+	return render_template('view.html')
 
 
 
@@ -89,7 +91,7 @@ def multi_query():
 		conn.close()
 		session['temp_csv'] = query_data.to_csv()
 		return render_template('query.html',select_query_name = req_query,
-			query_data = query_data.to_html(classes='query_data'),
+			query_data = query_data.to_html(classes="mdl-data-table mdl-js-data-table"),
 			query_keys = sorted(querys.keys()))
 	else:
 		return render_template('query.html',query_keys = sorted(querys.keys()))
@@ -123,14 +125,19 @@ def delete_data():
 				c.execute('''DELETE FROM dtable''')
 				conn.commit()
 				conn.close()
+				flash('Dファイルデータを削除しました')
+				return redirect(url_for('show_tables'))
 			elif request.form['t1'] == 'etable':
 				c.execute('''DELETE FROM etable''')
 				conn.commit()
 				conn.close()
-	return render_template('delete.html')
+				flash('EFファイルデータを削除しました')
+				return redirect(url_for('show_tables'))
+	return redirect(url_for('show_tables'))
 			
 
-
+#このflashは動くんだが、同じメッセージが２箇所で出てしまう…
+#先頭に持っていくなり、categoryを設けるなりしないとダメ
 
 #def dashboards():
 

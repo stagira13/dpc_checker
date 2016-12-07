@@ -1,25 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<nav>
-<h2>メニュー</h2>
-<ul>
-<li><a href = "{{ url_for('show_tables') }}">HOME</a></li>
-</nav>
 
-<h1>クエリ発行ページ</h1>
+<h1 class="mdl-card__title-text">クエリ発行ページ</h1>
 
 <li><a href = "{{ url_for('download_csv') }}">CSVダウンロード</a></li>
 
 
 <form action="{{ url_for('multi_query') }}"  method="post">
-<p>クエリ選択<br>
+<p>クエリ選択<br>{{ query_name }}
+
 {% for query_name in query_keys %}
-   <input type="radio" name="q1" value= {{ query_name }}> {{ query_name }}<br>
+   <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for= {{ query_name }}>
+   <input type="radio" class="mdl-radio__button" name="q1" id={{ query_name }} value={{ query_name }} >  
+   <span class="mdl-radio__label">{{ query_name }}</span>
+   </label>
+   <br>
 {% endfor %}
+
 </p>
- <button type="submit" name='trigger' value="on">クエリ実行</button>
+ <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit" name='trigger' value="on">クエリ実行</button>
  </form>
+
 
  
 <div class="tablecontainer">
@@ -28,7 +30,7 @@
 </div>
 
  
-<h1>クエリデータ</h1>
+<h1 class="mdl-card__title-text">クエリデータ</h1>
 <div class="tablecontainer">
 {{ query_data|safe }}
 </div>
