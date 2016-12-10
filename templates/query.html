@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
 
+<div class="mdl-grid">
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--8-col">
 <h2 class="mdl-typography--display-1">クエリ発行ページ</h2>
 
 <li><a href = "{{ url_for('download_csv') }}">CSVダウンロード</a></li>
@@ -12,22 +14,25 @@
 {% for query_name in query_keys %}
    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for= {{ query_name }}>
    <input type="radio" class="mdl-radio__button" name="q1" id={{ query_name }} value={{ query_name }} >  
-   <span class="mdl-radio__label">{{ query_name }}</span>
+   <span class="mdl-radio__label"><div class = "mdl-typography--headline">{{ query_name }}</div></span>
    </label>
    <br>
 {% endfor %}
 
+<br>
  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit" name='trigger' value="on">クエリ実行</button>
  </form>
 
+</div>
 
 
-<h2>{{ select_query_name|safe }}</h2>
-
- 
-<h1 class="mdl-typography--display-1">クエリデータ</h1>
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--8-col"> 
+<h1 class="mdl-typography--headline">クエリデータ</h1>
+<h2 class="mdl-typography--title">{{ select_query_name|safe }}</h2>
 {{ query_data|safe }}
 
+</div>
+</div>
 
 
 
