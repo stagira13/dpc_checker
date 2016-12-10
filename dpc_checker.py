@@ -28,8 +28,8 @@ c.execute('''CREATE TABLE IF NOT EXISTS etable(施設コード integer,データ
 レセプト電算コード real,解釈番号 text,診療明細名称 text,使用量 real,基準単位 real,明細点数・金額 real,\
 円点区分 integer,出来高実績点数 real,行為明細区分情報 text,行為点数 real,行為薬剤料 real, \
 行為材料料 real,行為回数 real,保険者番号 real, \
-レセプト種別コード real,実施年月日 text,レセプト科区分 real,診療科区分 real, \
-医師コード text,病棟コード real,病棟区分 real,入外区分 text, \
+レセプト種別コード real,実施年月日 text,レセプト科区分 real,診療科区分 text, \
+医師コード text,病棟コード text,病棟区分 text,入外区分 text, \
 施設タイプ text)''')
 
 conn.commit()
@@ -139,7 +139,73 @@ def delete_data():
 #このflashは動くんだが、同じメッセージが２箇所で出てしまう…
 #先頭に持っていくなり、categoryを設けるなりしないとダメ
 
-#def dashboards():
+@app.route("/board",methods = ['GET'])
+def dashboards():
+	test = dashData()
+	compare_byoto_j = test["compare_byoto"]
+	compare_ka_j = test["compare_ka"]
+	Percent_ka_j = test["Percent_ka"]
+	Percent_byoto_j = test["Percent_byoto"]
+	return render_template('board.html',compare_byoto_j = compare_byoto_j,
+		compare_ka_j = compare_ka_j,Percent_ka_j = Percent_ka_j,
+		Percent_byoto_j = Percent_byoto_j)
+
+
+#地域包括ケアがあるとバグるみたい。確認。92のせい
+def dashData():
+	conn = sqlite3.connect('dpc.db')
+	compare_byoto = '''WITH dsum AS ( select 病棟コード,sum(行為点数*行為回数) AS DPC総点数 \
+						from dtable \
+						where データ区分 <> 97 \
+						group by 病棟コード), \
+						efsum AS( \
+						SELECT 病棟コード,SUM(出来高実績点数*行為回数) AS 出来高総点数 \
+						FROM etable \
+						WHERE データ区分 <> 92 \
+						AND データ区分 <> 97 \
+						AND 行為明細区分情報 LIKE '__0_________' \
+						group by 病棟コード) \
+						select distinct 病棟コード, \
+						d.DPC総点数,e.出来高総点数,d.DPC総点数-e.出来高総点数 AS 出来高対比 \
+						from dsum AS d \
+						INNER JOIN efsum AS e \
+						USING(病棟コード);'''
+	compare_ka = '''WITH dsum AS ( select 診療科区分,sum(行為点数*行為回数) AS DPC総点数 \
+						from dtable \
+						where データ区分 <> 97 \
+						group by 診療科区分), \
+						efsum AS( SELECT 診療科区分,SUM(出来高実績点数*行為回数) AS 出来高総点数 \
+						FROM etable \
+						WHERE データ区分 <> 92 \
+						AND データ区分 <> 97 \
+						AND 行為明細区分情報 LIKE '__0_________' \
+						group by 診療科区分) \
+						select distinct 診療科区分, \
+						d.DPC総点数,e.出来高総点数,d.DPC総点数-e.出来高総点数 AS 出来高対比 \
+						from dsum AS d \
+						INNER JOIN efsum AS e \
+						USING(診療科区分);'''
+	Percent_ka = '''SELECT 診療科区分,sum(行為点数*行為回数) AS DPC総点数 \
+                      from dtable \
+                      Where データ区分 <> 97 \
+                      GROUP BY 診療科区分'''
+	Percent_byoto = '''SELECT 病棟コード,sum(行為点数*行為回数) AS DPC総点数 \
+                      from dtable \
+                      Where データ区分 <> 97 \
+                      GROUP BY 病棟コード'''
+
+	board_name = {"compare_byoto":compare_byoto,"compare_ka":compare_ka,
+    "Percent_ka":Percent_ka,"Percent_byoto":Percent_byoto}
+	board_data = {}
+	for i in board_name.keys():
+		df = pd.read_sql(board_name[i],conn)
+		jsondata = df.to_json(orient='records',force_ascii=False)
+		board_data[i] = jsondata
+	conn.close()
+	return board_data
+
+
+
 
 
 
@@ -153,4 +219,4 @@ if __name__ == "__main__":
 	url = 'http://127.0.0.1:%s' % port
 	
 	threading.Timer(1.45,lambda: webbrowser.open(url)).start()
-	app.run(port=port,debug=False)
+	app.run(port=port,debug=True)

@@ -5,7 +5,7 @@
 </script>
 <script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='jquery.dataTables.min.js') }}">
 </script>
-<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='d3.min.js') }}">
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='d3.js') }}">
 </script>
 <script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='c3.min.js') }}">
 </script>
@@ -29,6 +29,7 @@
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
           <a href="{{ url_for('show_tables') }}" class="mdl-layout__tab is-active">HOME</a>
           <a href="{{ url_for('multi_query') }}" class="mdl-layout__tab">Query</a>
+          <a href="{{ url_for('dashboards') }}" class="mdl-layout__tab">Dashboard</a>
         </div>
       </header>
 

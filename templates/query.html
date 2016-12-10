@@ -1,14 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
 
-
-<h1 class="mdl-card__title-text">クエリ発行ページ</h1>
+<h2 class="mdl-typography--display-1">クエリ発行ページ</h2>
 
 <li><a href = "{{ url_for('download_csv') }}">CSVダウンロード</a></li>
 
 
 <form action="{{ url_for('multi_query') }}"  method="post">
-<p>クエリ選択<br>{{ query_name }}
+<p>クエリ選択</p>
 
 {% for query_name in query_keys %}
    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for= {{ query_name }}>
@@ -18,22 +17,19 @@
    <br>
 {% endfor %}
 
-</p>
  <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit" name='trigger' value="on">クエリ実行</button>
  </form>
 
 
- 
-<div class="tablecontainer">
 
 <h2>{{ select_query_name|safe }}</h2>
-</div>
 
  
-<h1 class="mdl-card__title-text">クエリデータ</h1>
-<div class="tablecontainer">
+<h1 class="mdl-typography--display-1">クエリデータ</h1>
 {{ query_data|safe }}
-</div>
+
+
+
 
 <script>
 $(document).ready(function(){
@@ -47,10 +43,3 @@ iDisplayLength : -1
 
 
 {% endblock %}
-<!--
- <form action="{{ url_for('stack_tables') }}"  method="post">
- アクション：
-<input type="radio" name="stack" value="on" /> on　
- <input type="submit" value="実行ボタン">
- </form>
- -->
