@@ -10,7 +10,7 @@ WHERE データ区分 <> 92
 AND データ区分 <> 97 
 AND 行為明細区分情報 LIKE '__0_________' 
 group by データ識別番号,入院年月日) 
-select distinct d.データ識別番号-10 AS 患者ID,d.入院年月日, 
+select distinct d.データ識別番号,d.入院年月日, 
 d.DPC総点数,e.出来高総点数,d.DPC総点数-e.出来高総点数 AS 点数差異 
 from dsum AS d 
 INNER JOIN efsum AS e 
