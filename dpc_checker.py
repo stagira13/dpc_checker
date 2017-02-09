@@ -21,7 +21,8 @@ conn = sqlite3.connect('dpc.db')
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS dtable(施設番号 integer,データ識別番号 integer,退院年月日 text,入院年月日 text,データ区分 integer,順序番号 integer,点数マスタコード integer,レセ電算処理コード integer,解釈番号 text, \
 診療行為名称 text,行為点数 real, 行為薬剤料 real,行為材料料 real,円点区分 integer,行為回数 real,保険者番号 text,レセプト種別コード text,実施年月日 text,レセプト科区分 text,診療科区分 text, \
-医師コード text,病棟コード text,病棟区分 text,入外区分 text,施設タイプ text,算定開始日 text,算定終了日 text,算定起算日 text,分類番号 text,医療機関係数 real)''')
+医師コード text,病棟コード text,病棟区分 text,入外区分 text,施設タイプ text,算定開始日 text,算定終了日 text,算定起算日 text,分類番号 text,医療機関係数 real, \
+id integer PRIMARY KEY)''')
 
 c.execute('''CREATE TABLE IF NOT EXISTS etable(施設コード integer,データ識別番号 integer, \
 退院年月日 text,入院年月日 text,データ区分 real,順序番号 real,行為明細番号 integer,病院点数マスタコード real, \
@@ -99,6 +100,7 @@ def multi_query():
 
 
 
+
 @app.route("/csv",methods = ['GET'])
 def download_csv():
 	csvdata = session.get('temp_csv')
@@ -108,6 +110,8 @@ def download_csv():
 	response.mimetype = 'text/csv'
 
 	return response
+
+
 
 #別にユーザーログイン管理などをしないアプリケーションなので、secret keyはお飾りです。
 #これが設定されていないとsessionを使ってdef間にデータを渡すことが出来ません(globalを使う手もありますが)
@@ -139,16 +143,24 @@ def delete_data():
 #このflashは動くんだが、同じメッセージが２箇所で出てしまう…
 #先頭に持っていくなり、categoryを設けるなりしないとダメ
 
+
+
+@app.route("/getdata",methods = ['GET'])
+def getdata():
+	graphdf = dashData()
+	typedict = {'bar':'records','pie':'values'}
+	getkey = request.args.get('key')
+	print(getkey)
+	graphtype = request.args.get('type')
+	prejson = graphdf[getkey]
+	jsondata = prejson.to_json(orient=typedict[graphtype],force_ascii=False)
+	return jsondata
+
+
 @app.route("/board",methods = ['GET'])
 def dashboards():
-	test = dashData()
-	compare_byoto_j = test["compare_byoto"]
-	compare_ka_j = test["compare_ka"]
-	Percent_ka_j = test["Percent_ka"]
-	Percent_byoto_j = test["Percent_byoto"]
-	return render_template('board.html',compare_byoto_j = compare_byoto_j,
-		compare_ka_j = compare_ka_j,Percent_ka_j = Percent_ka_j,
-		Percent_byoto_j = Percent_byoto_j)
+	return render_template('board.html')
+
 
 
 #地域包括ケアがあるとバグるみたい。確認。92のせい
@@ -193,18 +205,28 @@ def dashData():
                       from dtable \
                       Where データ区分 <> 97 \
                       GROUP BY 病棟コード'''
+	mdc2_dpcsum = '''SELECT substr(分類番号,1,2) AS MDC2,sum(行為点数*行為回数) AS DPC総点数 \
+					from dtable \
+					Where データ区分 = 93 \
+					group by substr(分類番号,1,2)'''
+	ka_dpcsum = '''SELECT 診療科区分,sum(行為点数*行為回数) AS DPC総点数 \
+					from dtable \
+					Where データ区分 = 93 \
+					group by 診療科区分'''
+
+
 
 	board_name = {"compare_byoto":compare_byoto,"compare_ka":compare_ka,
-    "Percent_ka":Percent_ka,"Percent_byoto":Percent_byoto}
+    "Percent_ka":Percent_ka,"Percent_byoto":Percent_byoto,"mdc2_dpcsum":mdc2_dpcsum,
+    "ka_dpcsum":ka_dpcsum}
 	board_data = {}
 	for i in board_name.keys():
 		df = pd.read_sql(board_name[i],conn)
-		jsondata = df.to_json(orient='records',force_ascii=False)
-		board_data[i] = jsondata
+		board_data[i] = df
 	conn.close()
 	return board_data
 
-
+#書き換え。jsondataではなくdfを返す
 
 
 
@@ -219,4 +241,4 @@ if __name__ == "__main__":
 	url = 'http://127.0.0.1:%s' % port
 	
 	threading.Timer(1.45,lambda: webbrowser.open(url)).start()
-	app.run(port=port,debug=True)
+	app.run(port=port,debug=False)

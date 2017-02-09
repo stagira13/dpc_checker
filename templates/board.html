@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
+
 <h2 class="mdl-typography--display-1">ダッシュボード</h2>
 <p>ダッシュボード機能ベータ版。グラフは順次追加します。</p>
 
@@ -28,98 +29,23 @@
 <div id="perkachart"></div>
 </div>
 
-
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--6-col">
+<h6 class="mdl-typography--title">MDC2別　DPC入院料</h6>
+<div id="mdc2dpcchart"></div>
 </div>
 
 
+<div class="demo-content mdl-color--white mdl-shadow--4dp mdl-cell mdl-cell--6-col">
+<h6 class="mdl-typography--title">診療科別　DPC入院料</h6>
+<div id="kadpcchart"></div>
+</div>
 
 
-<script type="text/javascript">
+</div>
 
-var compare_byoto = {{ compare_byoto_j|safe }};
-var compare_ka = {{ compare_ka_j|safe }};
-var percent_byoto = {{ Percent_byoto_j|safe }};
-var percent_ka = {{ Percent_ka_j|safe }};
-
-
-var compbyochart = c3.generate({
-  bindto: '#compbyochart',
-    data: {
-      json : compare_byoto,
-      keys:{
-        x:'病棟コード',
-        value:['DPC総点数','出来高総点数','出来高対比']
-       },
-      type:'bar'
-    },
-    axis:{
-      x:{
-        type:'category'
-      }
-    }
-  });
-
-var compkachart = c3.generate({
-  bindto: '#compkachart',
-    data: {
-      json : compare_ka,
-      keys:{
-        x:'診療科区分',
-        value:['DPC総点数','出来高総点数','出来高対比']
-       },
-      type:'bar'
-    },
-    axis:{
-      x:{
-        type:'category'
-      }
-    }
-  });
-
-/*
-piechartは
-['病棟１':2000,'病棟２':4000]
-というように、カテゴリを持たないjsonしか読み込めない。
-[{病棟名:病棟１,総点数:2000}]のようなJSONデータ（現在の形式）
-は変換しないとダメ。
-下の形式でないと、複数カテゴリを持てないので、Piecharだけ特殊事例として変換
-したほうがベターかも。
-*/
-
-var tmpbyoto = {};
-percent_byoto.forEach(function(e) {
-    tmpbyoto[e.病棟コード] = e.DPC総点数;
-})    
-
-var tmpka = {};
-percent_ka.forEach(function(e) {
-    tmpka[e.診療科区分] = e.DPC総点数;
-})    
-
-
-var perbyochart = c3.generate({
-    bindto: '#perbyochart',
-    data: {
-        json : tmpbyoto,
-        type : 'pie',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-    }
-});
-
-var perkachart = c3.generate({
-    bindto: '#perkachart',
-    data: {
-        json : tmpka,
-        type : 'pie',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
-    }
-});
-     
+<script type="text/javascript" charset="utf8" src = "{{ url_for('static', filename='plotgraph.js') }}">
 </script>
+
 
 
 {% endblock %}
