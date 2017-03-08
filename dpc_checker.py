@@ -159,7 +159,31 @@ def getdata():
 
 @app.route("/board",methods = ['GET'])
 def dashboards():
-	return render_template('board.html')
+	MDC6sum,MDC6count = tableData()
+	return render_template('board.html',MDC6sum = MDC6sum.to_html(classes="mdl-data-table mdl-js-data-table"),
+		MDC6count = MDC6count.to_html(classes="mdl-data-table mdl-js-data-table"))
+
+
+def tableData():
+	conn = sqlite3.connect('dpc.db')
+	MDC6sum_query = '''select substr(分類番号,1,6) AS MDC6,sum(行為点数*行為回数) AS DPC入院料 \
+	from dtable \
+	where データ区分 = 93 \
+	group by substr(分類番号,1,6) \
+	order by sum(行為点数*行為回数) DESC \
+	LIMIT 10	
+	'''
+	MDC6count_query = '''select substr(分類番号,1,6) AS MDC6,sum(行為回数) AS DPC延件数 \
+	from dtable \
+	where データ区分 = 93 \
+	group by substr(分類番号,1,6) \
+	order by sum(行為回数) DESC \
+	LIMIT 10	
+	'''
+	MDC6sum = pd.read_sql(MDC6sum_query,conn)
+	MDC6count = pd.read_sql(MDC6count_query,conn)
+	conn.close()
+	return MDC6sum,MDC6count
 
 
 
