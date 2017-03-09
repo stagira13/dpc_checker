@@ -99,7 +99,7 @@ DPCチェッカー起動時に自動的に読み込まれ、`クエリ発行ペ�
 - D3.js
 - C3.js
 
-## 動作条件（Pythonスクリプトでの実行）
+## 動作条件（Pythonスクリプトでの実行。Windows版は特になし）
 
 Python 3.x系統　Flask,Pandas必須
 Anaconda推奨
